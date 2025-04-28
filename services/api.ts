@@ -3,8 +3,7 @@ import { StartupTypeCard } from "@/components/StartupCard";
 export const IDEAS_CONFIG = {
   BASE_URL: process.env.EXPO_PUBLIC_IDEAS_API,
   headers: {
-    accept: 'application/json',
-    // Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_READ}`
+    accept: 'application/json'
   }
 }
 
@@ -28,7 +27,24 @@ export const fetchIdeas = async({query}: {
 
   const data = await response.json();
 
-  // console.log(data.data)
+  return data.data;
+}
+
+export const fetchIdea = async(id: string): Promise<StartupTypeCard> => {
+  const endpoint = `${IDEAS_CONFIG.BASE_URL}/ideas/${id}`;
+
+  const response = await fetch(endpoint, {
+    method: 'GET',
+    headers: IDEAS_CONFIG.headers
+  });
+
+  if(!response.ok){
+    // @ts-ignore
+    throw new Error('Failed to fetch idea: ', response.statusText);
+
+  }
+
+  const data = await response.json();
 
   return data.data;
 }

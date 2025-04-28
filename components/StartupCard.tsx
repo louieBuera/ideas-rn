@@ -1,7 +1,8 @@
 import { Author, Startup } from "@/assets/types";
 import { formatDate } from "@/lib/utils";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button } from "react-native";
 import { Eye } from 'lucide-react-native';
+import { Link } from "expo-router";
 
 export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
 
@@ -9,7 +10,7 @@ export default function StartupCard({
   post
 }: { post: StartupTypeCard }) {
   const {
-    _id, _createdAt, views,
+    _id: id, _createdAt, views,
     author,
     title, image, description, category
   } = post;
@@ -29,7 +30,12 @@ export default function StartupCard({
     <View className="flex flex-row mt-5 gap-5">
       <View className="flex-1">
         <Text className="text-xl font-bold">{ author?.name }</Text>
-        <Text className="text-3xl">{ title }</Text>
+        <Link href={{
+          pathname: `/idea/[id]`,
+          params: { id }
+        }}>
+          <Text className="text-3xl">{ title }</Text>
+        </Link>
       </View>
       <Image source={{
         uri: author?.image
@@ -38,12 +44,18 @@ export default function StartupCard({
       }} className="size-[48px]"/>
       
     </View>
-    <TouchableOpacity className="w-full">
-      <Text className="text-l">{ description }</Text>
+    <Link href={{
+      pathname: `/idea/[id]`,
+      params: { id }
+    }}>
+      <Text className="text-l my-3">{ description }</Text>
       <Image className="w-full h-52 rounded-lg"
         source={{ uri: image }}
         resizeMode="cover"
       />
-    </TouchableOpacity>
+    </Link>
+    <View className="flex justify-between gap-3 mt-5">
+      <Text className="text-base font-bold">{ category }</Text>
+    </View>
   </View>
 }
