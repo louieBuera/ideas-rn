@@ -1,22 +1,43 @@
+import StartupCard from "@/components/StartupCard";
 import { images } from "@/constants/images";
-import { Text, View, Image } from "react-native";
+import { fetchIdeas } from "@/services/api";
+import { useFetch } from "@/services/useFetch";
+import { Text, View, Image, ScrollView, FlatList } from "react-native";
 
 export default function Index() {
+
+  const {
+    data: ideas,
+    loading: moviesLoading,
+    error: moviesError
+  } = useFetch(() => fetchIdeas({
+    // query: undefined
+  }));
+  
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        // backgroundImage: images.bg
-      }}
+    <ScrollView
+      className="flex-1"
     >
-      <Image source={images.bg}
-        className="absolute w-full z-0"
-        style={{ opacity: 0.1 }}
-        resizeMode="cover"
-      />
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+      <View className="pink_container">
+        <View className="bg-black py-10 px-5">
+          <Text className="text-6xl font-bold text-white">
+            Learning React Native Expo
+          </Text>
+        </View>
+        
+      </View>
+      <FlatList
+
+        scrollEnabled={false}
+        data={ideas}
+        renderItem={({item}) => <StartupCard post={item}/>}
+        numColumns={2}
+        columnWrapperStyle={{
+          justifyContent: 'space-around'
+        }}
+      >
+
+      </FlatList>
+    </ScrollView>
   );
 }

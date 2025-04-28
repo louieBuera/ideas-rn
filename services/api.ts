@@ -1,4 +1,4 @@
-import { Startup } from "@/assets/types"
+import { StartupTypeCard } from "@/components/StartupCard";
 
 export const IDEAS_CONFIG = {
   BASE_URL: process.env.EXPO_PUBLIC_IDEAS_API,
@@ -9,11 +9,11 @@ export const IDEAS_CONFIG = {
 }
 
 export const fetchIdeas = async({query}: {
-  query: string
-}): Promise<Startup[]> => {
+  query?: string
+}): Promise<StartupTypeCard[]> => {
   const endpoint = query && query != ''
-    ? `${IDEAS_CONFIG.BASE_URL}/search?query=${encodeURIComponent(query)}`
-    : `${IDEAS_CONFIG.BASE_URL}/default`;
+    ? `${IDEAS_CONFIG.BASE_URL}/ideas?query=${encodeURIComponent(query)}`
+    : `${IDEAS_CONFIG.BASE_URL}/ideas?sort_by=popularity.desc`;
 
   const response = await fetch(endpoint, {
     method: 'GET',
@@ -27,5 +27,8 @@ export const fetchIdeas = async({query}: {
   }
 
   const data = await response.json();
-  return data.results;
+
+  // console.log(data.data)
+
+  return data.data;
 }
